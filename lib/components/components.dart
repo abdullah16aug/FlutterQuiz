@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:quiz/screens/constant.dart';
 
@@ -42,6 +43,67 @@ class CustomButton extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class BackgroundWidget extends StatelessWidget {
+  final String backgroundImagePath;
+  final String title;
+  final num height;
+  final List<Widget> children; // List of widgets to be displayed on top of the background
+  final Widget content;
+
+  BackgroundWidget({
+    required this.backgroundImagePath,
+    required this.title,
+    required this.content,
+    required this.height,
+    this.children = const [], // Initialize with an empty list by default
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          // First Half: Fixed Background Image
+          Container(
+            height: MediaQuery.of(context).size.height * height, // Half of the screen height
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(backgroundImagePath),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Center(
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+
+          // Second Half: Content
+          Container(
+            height: MediaQuery.of(context).size.height * 0.5, // Half of the screen height
+            color: Colors.white, // Background color for the second half
+            child: Stack(
+              children: [
+                // Custom widgets added by the user
+                ...children,
+
+                // Default content
+                Center(child: content),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

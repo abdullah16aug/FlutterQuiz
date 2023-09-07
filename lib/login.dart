@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 class LoginWidget extends StatefulWidget {
   @override
   _LoginWidgetState createState() => _LoginWidgetState();
@@ -7,12 +8,56 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   bool passwordVisible = false;
+  TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     passwordVisible = false;
+  }
+  void _handleLogin() async {
+    // Retrieve the email and password entered by the user
+    final String email = _emailController.text;
+    final String password = _passwordController.text;
+ // Create a map with the user's email and password
+  final Map<String, String> userData = {
+    'email': email,
+    'password': password,
+  };
+
+   // Define your backend API URL
+  final String apiUrl = 'http://localhost:8080/auth/login';
+    // Perform your authentication logic here, e.g., make an API request to your backend
+    // You can use the email and password for authentication
+
+  try {
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(userData),
+    );
+
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON response
+      final responseData = jsonDecode(response.body);
+      // You can now handle the response data as needed
+      print('Login Successful: $responseData');
+      
+      // Navigate to the next screen or perform other actions
+                Navigator.pushNamed(context, 'fillname');
+
+    } else {
+      // If the server returns an error response, throw an exception
+      throw Exception('Login failed');
+    }
+  } catch (e) {
+    // Handle any errors that occurred during the HTTP request
+    print('Error: $e');
+    // Display an error message to the user or handle it accordingly
+  }
   }
 
   @override
@@ -67,6 +112,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   ),
                   SizedBox(height: 40.0),
                   TextField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                       hintText: 'Email',
                       fillColor: Color(0xFFE7D8F8),
@@ -128,10 +174,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         Colors.white,
                       ),
                     ),
-                    onPressed: () {
-                      // Handle button press and user input here
-                      Navigator.pushNamed(context, 'home');
-                    },
+                    onPressed: _handleLogin,
                     child: Text('Login'),
                   ),
              Container(
@@ -171,6 +214,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   @override
   void dispose() {
+     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }

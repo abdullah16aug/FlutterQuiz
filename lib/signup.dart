@@ -145,7 +145,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                     ),
                     onPressed: () {
                       // Handle button press and user input here
-                      Navigator.pushNamed(context, 'verify');
+                      Navigator.pushNamed(context, 'school');
                     },
                     child: Text('Login'),
                   ),

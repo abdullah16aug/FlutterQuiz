@@ -40,7 +40,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     Container(
                       padding: EdgeInsets.only(left: 35, top: 130),
                       child: Text(
-                        'Hello Again, We’ve been waiting for you.',
+                        'Hello AgainI am home',
                         style: TextStyle(color: Colors.white, fontSize: 33),
                       ),
                     )
